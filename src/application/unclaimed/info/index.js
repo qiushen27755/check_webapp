@@ -35,6 +35,7 @@ class UnInfoList extends React.Component{
         return(
             <div>
                 <h2>哈哈哈</h2>
+                <button onClick={this.props.runPage}>返回111</button>
             </div>
         )
     }

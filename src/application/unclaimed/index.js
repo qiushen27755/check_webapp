@@ -15,7 +15,7 @@ class Unclaimed extends Component {
         this.state = { 
             dataSource:ds,
             list:[],
-            info:[],
+            changeCode:{},
             changeInfo:false, // 换页面
             runListView:true, 
             pullLoading:false,
@@ -24,17 +24,19 @@ class Unclaimed extends Component {
         }
         this.connBoot=this.connBoot.bind(this)
         this.enterDetail=this.enterDetail.bind(this)
-    }
-    //初始化 挂载
-    componentDidMount(){
-      this.connBoot(0)
+        this.runPage=this.runPage.bind(this)
     }
     // 转换明细页面
     enterDetail(param) {
       this.setState({
         runListView:false,
         changeInfo:true,
-       })
+        changeCode:param
+      })
+    }
+    //初始化 挂载
+    componentDidMount(){
+      this.connBoot({index:0,status:0})
     }
     renderRow=(item,id)=>{
       //渲染子项
@@ -71,10 +73,32 @@ class Unclaimed extends Component {
       
       );
    }
-    
+     connBoot(param){
+      const {index,status}=param
+      axios({
+        url:'http://192.168.233.1:8081/checkSever/payList',
+        method:'POST',
+        data:{
+          "code":"1111",
+          "offset":setoff,
+          "index":Number(index),
+          "state":Number(status)
+        },
+        headers:{'Content-Type':'application/json'}
+      }).then(res=>{
+          const list=JSON.parse(JSON.stringify(res.data))
+          const dataSource=this.state.dataSource.cloneWithRows(list.data)
+          console.log(list)
+          this.setState({
+              dataSource:dataSource,
+              list:list,
+              pullLoading:false,
+              upLoading:false,
+          })
+      }).catch(error => Toast.fail('Load failed'+error, 1))
+     }
     render() { 
-        const {list,dataSource,info} =this.state
-        const {runListView,upLoading,pullLoading,changeInfo}=this.state
+        const {runListView,list,dataSource,upLoading,pullLoading,changeInfo} =this.state
          const separator=(sectionID,rowID)=>
         (  
             <div 
@@ -124,35 +148,19 @@ class Unclaimed extends Component {
                                   onRefresh={this.onRefresh}
                               />}
               />   
-              :  changeInfo && info.data? <div> 
-                <UnInfoList param={this.state.changeCode} /> </div> :  <Loading></Loading>
+              :  changeInfo ? <div> 
+                <UnInfoList param={this.state.changeCode} 
+                          runPage={this.runPage}/> 
+                </div> :  <Loading></Loading>
              }
            </div>
          ); // 后续最后的三目更换位置
     }
-    connBoot(param){
-      axios({
-        url:'http://192.168.233.1:8081/checkSever/payList',
-        method:'POST',
-        data:{
-          "code":"1111",
-          "offset":setoff,
-          "index":0,
-          "state":0
-        },
-        headers:{'Content-Type':'application/json'}
-      }).then(res=>{
-          const list=JSON.parse(JSON.stringify(res.data))
-          const dataSource=this.state.dataSource.cloneWithRows(list.data)
-          console.log(list)
-          this.setState({
-              dataSource:dataSource,
-              list:list,
-              pullLoading:false,
-              upLoading:false,
-          })
-      }).catch(error => Toast.fail('Load failed'+error, 1))
-     }
+      runPage(){
+        this.setState({
+          runListView:true
+        })
+      }
      //暂定 开始 进行中 结算完毕
    runState=(approve)=>{
      let status=Number(approve)
@@ -175,7 +183,7 @@ class Unclaimed extends Component {
             pullLoading:true
         }) 
         let index= page+1
-        this.connBoot(index)
+        this.connBoot({index:index,status:0})
     }
     }
     //下拉
@@ -183,7 +191,7 @@ class Unclaimed extends Component {
         this.setState(
             {upLoading:true}
         )
-        this.connBoot(0)
+        this.connBoot({index:0,status:0})
       }
 }
  
