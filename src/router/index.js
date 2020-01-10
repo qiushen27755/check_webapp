@@ -7,7 +7,6 @@ import Claimed from '../application/claimed'
 import Unclaimed from '../application/unclaimed'
 import Login from '../application/login'
 //子集
-import UnInfo from '../application/unclaimed/unInfo'
 export default[
     {
         path:'/',
@@ -16,12 +15,7 @@ export default[
             { path :'/', exact : true, render:()=>(<Redirect to={"/unclaimed"} /> )},
             {
                 path:'/unclaimed', component: Unclaimed,
-                routes: [
-                    {
-                        path:'/unclaimed/info/:id',
-                        component: UnInfo
-                    }
-                ]
+                 
             },
             {
                 path:'/claimed',
