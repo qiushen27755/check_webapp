@@ -3,7 +3,7 @@ import axios from 'axios'
 import {ListView,PullToRefresh,Icon, Card, WingBlank, WhiteSpace ,Toast } from 'antd-mobile'
 import Loading from '../../component/loading'
 import UnInfoList from './info'
-
+import {baseUrl} from '../../API'
 const setoff=10
 class Unclaimed extends Component {
     constructor(props) {
@@ -20,6 +20,7 @@ class Unclaimed extends Component {
             runListView:true, 
             pullLoading:false,
             upLoading:false,
+            goBack:false,
             route: props.route.routes
         }
         this.connBoot=this.connBoot.bind(this)
@@ -36,6 +37,7 @@ class Unclaimed extends Component {
     }
     //初始化 挂载
     componentDidMount(){
+      console.log('回来了？')
       this.connBoot({index:0,status:0})
     }
     renderRow=(item,id)=>{
@@ -76,7 +78,7 @@ class Unclaimed extends Component {
      connBoot(param){
       const {index,status}=param
       axios({
-        url:'http://192.168.233.1:8081/checkSever/payList',
+        url:`${baseUrl}/checkSever/payList`,
         method:'POST',
         data:{
           "code":"1111",
@@ -158,7 +160,8 @@ class Unclaimed extends Component {
     }
       runPage(){
         this.setState({
-          runListView:true
+          runListView:true,
+          
         })
       }
      //暂定 开始 进行中 结算完毕
