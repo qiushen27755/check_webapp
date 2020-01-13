@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 import {ListView,PullToRefresh,Icon, Card, WingBlank, WhiteSpace ,Toast } from 'antd-mobile'
 import Loading from '../../component/loading'
 import UnInfoList from './info'
-import {baseUrl} from '../../API'
+import httpPost from '../../api/fetch'
 const setoff=10
 class Unclaimed extends Component {
     constructor(props) {
@@ -21,8 +20,7 @@ class Unclaimed extends Component {
             pullLoading:false,
             upLoading:false,
             goBack:false,
-            route: props.route.routes
-        }
+         }
         this.connBoot=this.connBoot.bind(this)
         this.enterDetail=this.enterDetail.bind(this)
         this.runPage=this.runPage.bind(this)
@@ -37,13 +35,12 @@ class Unclaimed extends Component {
     }
     //初始化 挂载
     componentDidMount(){
-      console.log('回来了？')
-      this.connBoot({index:0,status:0})
+       this.connBoot({index:0,status:0})
     }
     renderRow=(item,id)=>{
       //渲染子项
       // console.log(JSON.stringify(item))
-      const code=item.rec_code
+      const code=item.pk_pay
        return (
          <div key={code+id}>
         <WingBlank size="lg">
@@ -58,16 +55,14 @@ class Unclaimed extends Component {
               {item.cust_name}付款<span style={{"color":"green"}}>{item.money}</span>元
               <div style={{"marginTop":"5px"}}>
                   {this.runState(item.status)}
-                  <div style={{"marginTop":"5px"}}>
-                  {
-                    item.memo ? <p style={{"fontSize":"12px","float":"right",
-                    "color":"#4D4D4D"}}>{item.memo}</p> : ''
+                   {
+                    item.memo ? <p style={{"fontSize":"12px",float:'right',"color":"#4D4D4D"}}>
+                      {item.memo}</p> : ''
                   }
-                  </div>
-              </div>
+               </div>
               </div>
           </Card.Body>
-          <Card.Footer content="支付日期" extra={item.type} />
+          <Card.Footer content="支付日期" extra={item.pay_time} />
         </Card>
          <WhiteSpace size="lg" />
       </WingBlank>
@@ -77,27 +72,25 @@ class Unclaimed extends Component {
    }
      connBoot(param){
       const {index,status}=param
-      axios({
-        url:`${baseUrl}/checkSever/payList`,
-        method:'POST',
-        data:{
+      httpPost({
+         url:'checkSever/payList',
+         data:{
           "code":"1111",
           "offset":setoff,
           "index":Number(index),
           "state":Number(status)
-        },
-        headers:{'Content-Type':'application/json'}
-      }).then(res=>{
-          const list=JSON.parse(JSON.stringify(res.data))
+        },   
+       success: res=>{
+          const list=JSON.parse(JSON.stringify(res))
           const dataSource=this.state.dataSource.cloneWithRows(list.data)
-          console.log(list)
           this.setState({
               dataSource:dataSource,
               list:list,
               pullLoading:false,
               upLoading:false,
           })
-      }).catch(error => Toast.fail('Load failed'+error, 1))
+      },
+      error:error => Toast.fail('Load failed'+error, 1) })
      }
     render() { 
         const {runListView,list,dataSource,upLoading,pullLoading,changeInfo} =this.state
@@ -139,12 +132,11 @@ class Unclaimed extends Component {
 
                   pageSize={list.pageSize}  //每次循环事件 渲染的行数
                   // renderBodyComponent={() => <MyBody />}
-                  renderSectionBodyWrapper={(rowData) => this.renderRow(rowData)}
-                  useBodyScroll  //使用html的body 作为滚动容器
+                   useBodyScroll  //使用html的body 作为滚动容器
                   // onScroll={(e) => { console.log('.......'); }} // 列表渲染每行可通过此进行回调
-                  scrollRenderAheadDistance={500} //定制每行接近屏幕范围
+                  scrollRenderAheadDistance={200} //定制每行接近屏幕范围
                   onEndReached={() => this.onEndReached(list.pageNum, list.pageTotal)} // 自动渲染机制
-                  onEndReachedThreshold={10}
+                  onEndReachedThreshold={200}
                   pullToRefresh={<PullToRefresh  
                                   refreshing={pullLoading}
                                   onRefresh={this.onRefresh}
@@ -152,7 +144,8 @@ class Unclaimed extends Component {
               />   
               :  changeInfo ? <div> 
                 <UnInfoList param={this.state.changeCode} 
-                          runPage={this.runPage}/> 
+                            runPage={this.runPage}
+                            /> 
                 </div> :  <Loading></Loading>
              }
            </div>
@@ -167,14 +160,14 @@ class Unclaimed extends Component {
      //暂定 开始 进行中 结算完毕
    runState=(approve)=>{
      let status=Number(approve)
-     if(status===0){
+     if(status===1){
        return <span style={{"marginLeft":"3px","fontSize":"10px",
               "backgroundColor":"#8EE5EE","color":"#595959"}}>{''} 未认领{''} </span>
-     }else if(status===1){
+     }else if(status===2){
       return <span style={{"marginLeft":"3px","fontSize":"10px",
               "backgroundColor":"#FF0000","color":"#595959"}}>{''} 结算中{''} </span>
 
-     }else if(status===2){
+     }else if(status===3){
       return <span style={{"marginLeft":"3px","fontSize":"10px",
               "backgroundColor":"#00FF00","color":"#595959"}}>{''} 已结算{''} </span>
      }

@@ -15,15 +15,12 @@ export default[
             { path :'/', exact : true, render:()=>(<Redirect to={"/unclaimed"} /> )},
             {
                 path:'/unclaimed', component: Unclaimed,
-                 
             },
             {
-                path:'/claimed',
-                component: Claimed
+                path:'/claimed',component: Claimed
             },
             {
-                path: '/cert',
-                component: Cert
+                path: '/cert',component: Cert
             }
         ]
     }
