@@ -6,10 +6,9 @@ import { NavLink } from 'react-router-dom';
     const {route}=props
      return (
          <div>
-          
              <Top>
                 <span className="iconfont menu">&#xe65c;</span>
-                <span className="title">webApp</span>
+                <span className="title">Sunon</span>
                 <span className="iconfont search">&#xe62b;</span>
             </Top> 
             <Tab>

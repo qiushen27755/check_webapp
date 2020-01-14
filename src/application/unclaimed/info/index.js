@@ -1,7 +1,7 @@
 import React from 'react'
 import { Toast } from 'antd-mobile'
 import httpPost from '../../../api/fetch'
-import { List, Button,WingBlank,WhiteSpace} from 'antd-mobile';
+import { List,Button,WingBlank,WhiteSpace} from 'antd-mobile';
 import ListInfo from './utools'
 import CertInt from '../certInt'
  const Item = List.Item;
@@ -60,13 +60,12 @@ class UnInfoList extends React.Component{
                       <div style={{
                             backgroundColor: '#FFFFFF',
                             borderTop: '0.5px solid #ECECED',
-                            borderBottom: '0.5px solid #ECECED',
+                            padding:'10px 10px 15px 20px',
                             marginTop:'10px'}}>
-                        <Button type="primary" inline disabled={disabled}
-                            style={{ marginLeft: '10px',  padding: '0.5' }} 
-                            onClick={this.props.runPage} >返回</Button>
-                        <Button type={bType} inline loading={loading}
-                            style={{ float:'right' ,marginRight: '10px',padding: '0.5' }} 
+                        <Button type="primary" size="small" inline disabled={disabled}
+                             onClick={this.props.runPage} >返回</Button>
+                        <Button type={bType} inline loading={loading} size="small"
+                            style={{ float:'right'  }} 
                             onClick={this.runInsert} >{butRun}</Button>
                         </div> : <CertInt goInfo={this.goInfo}/>
                      }   

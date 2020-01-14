@@ -8,7 +8,7 @@ export const Top = styled.div`
   padding: 5px 10px;
   background: ${style["theme-color"]};
   &>span {
-    line-height: 40px;
+    line-height: 30px;
     color: #f1f1f1;
     font-size: 20px;
     &.iconfont {
@@ -18,7 +18,7 @@ export const Top = styled.div`
 `
 //tab
 export const Tab = styled.div`
-  height: 44px;
+  height: 34px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
