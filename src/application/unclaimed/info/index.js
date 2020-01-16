@@ -1,7 +1,7 @@
 import React from 'react'
 import { Toast } from 'antd-mobile'
 import httpPost from '../../../api/fetch'
-import { List,Button,WingBlank,WhiteSpace} from 'antd-mobile';
+import { List,WingBlank,WhiteSpace} from 'antd-mobile';
 import ListInfo from './utools'
 import CertInt from '../certInt'
  const Item = List.Item;
@@ -9,89 +9,46 @@ class UnInfoList extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            detail:[],
-            runInsert:true, // 详细页
-            status:{},//标记状态
-            loading:false,
-            butRun:'认领',
-            bType:'primary',
-            disabled:false, //不可返回
-            msg:'无数据'
-        }
-        this.goInfo=this.goInfo.bind(this)
-        this.runInsert=this.runInsert.bind(this)
+            detail:[]
+           }
      }
     componentDidMount(){
-        console.log(this.props.routes)
-        const param=this.props.param
-        let pk_pay=param.pk_pay
-        let status=Number(param.status)
+        const {pk_pay,status}=this.props.param
+        console.log(this.props)
         httpPost({
-            url:'/checkSever/payListInfo',
+            url:'checkSever/payListInfo',
              data:{
               "pk_pay":pk_pay,
-              "status":status
+              "status":Number(status)
             },
             success:res=>{
                 const list=JSON.parse(JSON.stringify(res))
-                console.log(list)
-                this.setState({
-                    detail:list,
-                    status:status
-                })
+                 this.setState({
+                    detail:list
+                 })
             },
             error:error => Toast.fail('Load failed'+error, 1)})
     }
     render(){
-        const {runInsert,loading,disabled} = this.state
-        const {detail,butRun,bType,msg}=this.state 
+        const {detail}=this.state 
+        const {runClaim,msg}=this.props.doClaim //父组件传的值明细界面的切换
+        const {checkBox}=this.props.certForm  //父组件传值 判断 认领界面的切换
         const item=detail.data
-         return(
+          return(
              
              <WingBlank>
                  <WhiteSpace size="lg" />
                      { 
-                     runInsert && detail && item ? 
+                        runClaim && detail && item ? 
                                 <ListInfo item={item}/>                                   
-                                : msg?<Item>{msg}</Item> :null
+                                : msg?<Item>{msg}</Item> : 
+                        <CertInt checkBox={checkBox} />
                      }
-                     {
-                     runInsert ?     
-                      <div style={{
-                            backgroundColor: '#FFFFFF',
-                            borderTop: '0.5px solid #ECECED',
-                            padding:'10px 10px 15px 20px',
-                            marginTop:'10px'}}>
-                        <Button type="primary" size="small" inline disabled={disabled}
-                             onClick={this.props.runPage} >返回</Button>
-                        <Button type={bType} inline loading={loading} size="small"
-                            style={{ float:'right'  }} 
-                            onClick={this.runInsert} >{butRun}</Button>
-                        </div> : <CertInt goInfo={this.goInfo}/>
-                     }   
                 </WingBlank>
         )
     }
-    Loading=()=>{
-        this.setState({
-            loading:true,
-            butRun:'',
-            bType:'ghost',
-            disabled:true
-        })
-    }
-    runInsert(){
-        this.setState({
-            runInsert:false,
-            msg:''
-        })
-    }
-    //返回
-     goInfo(){
-         this.setState({
-             runInsert:true
-         })
-     }
+ 
+   
 }
  
 export default UnInfoList;
