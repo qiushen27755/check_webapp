@@ -1,5 +1,11 @@
 import axios from 'axios'
 import {baseUrl} from './host'
+import {getStorage} from './storage'
+
+function sessionId(){
+    let u=getStorage('loginInfo')
+    return u? `sessionId=${u.sessionId};pk_psndoc=${u.pk_psndoc}`:''
+}
 
 /**
  * 封装的POST请求 默认json传递
@@ -12,6 +18,7 @@ const httpPost=(request)=>{
          param: request.param ? request.param : {},
          headers: {
              'Content-Type': 'application/json',
+             'sessionId': sessionId()
           }
      }).then( res=>{
          if(res.data.statusCode===10010){

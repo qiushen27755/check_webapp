@@ -10,8 +10,8 @@ export default function ListInfo(props){
         <List renderHeader={() => <span>银行汇款明细</span>}>
             <List.Item>
             <ul>
-                <li><TextareaItem disabled title="客户" value={cust_name} autoHeight /></li>
                 <li><InputItem disabled value={cust_code}><span >客户编码</span></InputItem></li>
+                <li><TextareaItem disabled title="客户" value={cust_name} autoHeight /></li>
                 <li><InputItem disabled value={type}><span >类型</span></InputItem></li>
                 <li><InputItem disabled value={state}><span >状态</span></InputItem></li>
                 <li><InputItem disabled value={pay_money}><span >金额</span></InputItem></li>

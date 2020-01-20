@@ -12,7 +12,7 @@ export default[
         path:'/',
         component: Login,
         routes:[
-            { path :'/', exact : true, render:()=>(<Redirect to={"/unclaimed"} /> )},
+            { path :'/', exact:true, render:()=>(<Redirect to={"/unclaimed"} /> )},
             {
                 path:'/unclaimed', component: Unclaimed,
             },
