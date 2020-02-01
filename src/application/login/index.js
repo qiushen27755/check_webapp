@@ -20,7 +20,7 @@ import LoadingSelf from '../../component/loading'
                dd.ready(()=>{
                   dd.runtime.permission.requestAuthCode({
                       corpId: "dingcd7886c79215f02235c2f4657eb6378f",
-                      onSuccess: function (result) {
+                      onSuccess:  result=> {
                           const loginInfo={}
                           const code = result.code;
                           httpPost({
@@ -36,8 +36,9 @@ import LoadingSelf from '../../component/loading'
                                 setStorage('userId',loginInfo.userId)
                                 setStorage('pk_psndoc',loginInfo.pk_psndoc)
                                 this.setState({redirect:true})
-                          },
+                            },
                           error:error => Toast.fail('登录异常:'+error, 1) })
+
                           }
                         
                       });
@@ -58,9 +59,6 @@ import LoadingSelf from '../../component/loading'
                     this.setState({redirect:true})
                 },
             error:error => Toast.fail('登录异常:'+error, 1) })   
-            
-            // runTest('118543')  this.setState({redirect:true})
-
             }
      
      
@@ -80,10 +78,8 @@ import LoadingSelf from '../../component/loading'
                             <NavLink to="/claimed" activeClassName="selected"><TabItem><span>已认领</span></TabItem></NavLink>
                             <NavLink to="/cert" activeClassName="selected"><TabItem><span>我的合同</span></TabItem></NavLink>
                         </Tab>
-           {  redirect ?  renderRoutes (route.routes)  : <LoadingSelf></LoadingSelf>}
+                    {  redirect ?  renderRoutes (route.routes)  : <LoadingSelf></LoadingSelf>}
                     </div> 
-                    
-               
            );
      }
 

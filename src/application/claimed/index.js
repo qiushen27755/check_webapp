@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import {ListView,PullToRefresh,Icon, Card, WingBlank, WhiteSpace ,Toast} from 'antd-mobile'
+import {ListView,PullToRefresh,Icon, Toast} from 'antd-mobile'
 import LoadingSelf from '../../component/loading'
 import httpPost from '../../api/fetch'
+import RenderRow from '../../component/rowmap'
+import  InfoListed from './info'
 const setoff=5
 const state=3 //这里所有的都是围绕未认领的
  class Claimed extends Component {
@@ -64,36 +66,10 @@ connBoot(param){
   },
   error:error => Toast.fail('Load failed'+error, 1) })
  }
-renderRow=(item,id)=>{
-  const {pk_pay,pay_time,cust_name,pay_money,pay_type,memo,status}=item
-      return (
-        <div key={pk_pay+id}>
-          <WingBlank size="lg">
-            <WhiteSpace size="lg" />
-              <Card onClick={()=>this.enterDetail({pk_pay:pk_pay,status:status})}>
-                <Card.Header
-                  title= {pay_type}
-                  extra={<span style={{"fontSize":"12px","float":"right","color":"#B8860B"}}>{pk_pay}</span>}
-                  />
-                <Card.Body>
-                  <div >
-                      {cust_name}付款<span style={{"color":"green"}}>{pay_money}</span>元
-                      <div style={{"marginTop":"5px"}}>
-                          {this.runState(status)}
-                          {
-                            memo ? <p style={{"fontSize":"12px",float:'right',"color":"#4D4D4D"}}>
-                              {memo}</p> : ''
-                          }
-                      </div>
-                    </div>
-                </Card.Body>
-                <Card.Footer content="支付日期" extra={pay_time} />
-              </Card>
-             <WhiteSpace size="lg" />
-          </WingBlank>
-        </div>
-  );
-}
+renderRow=(item,id)=> (
+  <RenderRow item={item} id={id} enterDetail={this.enterDetail} 
+  runState={this.runState}/>
+)
  
 render() { 
     const {list,dataSource,body,infoParam} =this.state
@@ -137,7 +113,7 @@ render() {
                                             /> 
                               }
             />   
-            :  <div>{infoParam}</div> 
+            :   <InfoListed param={infoParam} />
           }
        </div>
      )

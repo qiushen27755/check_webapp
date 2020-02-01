@@ -34,6 +34,8 @@ class UnInfoList extends React.Component{
             error:error => Toast.fail('Load failed'+error, 1)})
     }
     render(){
+        const {pk_pay,status}=this.props.param
+
         const {detail,msg}=this.state 
         const {stay,disable}=this.state
         const item=detail.data
@@ -43,7 +45,12 @@ class UnInfoList extends React.Component{
                       { 
                         stay && detail && item ? 
                         <div>
-                            <WingBlank><ListInfo item={item}/> </WingBlank>
+                            <WingBlank><ListInfo item={item}/> 
+                            {
+                                Number(status)===2?<p>这是2</p>:null
+                            }
+                            
+                            </WingBlank>
                             <div style={{ backgroundColor: '#FFFFFF', borderTop: '0.5px solid #ECECED',
                                              padding:'10px 10px 15px 20px', marginTop:'10px'}}>
                                  <Button type="primary" size="small" inline disabled={disable} onClick={this.props.goBackHome}
