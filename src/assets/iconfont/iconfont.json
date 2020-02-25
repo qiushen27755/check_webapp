@@ -1,0 +1,23 @@
+{
+  "id": "1616815",
+  "name": "test",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "714438",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "5771114",
+      "name": "首页",
+      "font_class": "home",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    }
+  ]
+}

@@ -1,26 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+ //样式
+ import {IconStyle} from './assets/iconfont/iconfont'
+ import {GlobalStyle} from './styles'
+ //路由
+ import {HashRouter} from 'react-router-dom'
+ import { renderRoutes } from 'react-router-config'
+ import routes from './router'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App(){
+    return (
+             <HashRouter>
+            <GlobalStyle></GlobalStyle>
+            <IconStyle></IconStyle>
+                 {renderRoutes(routes)}
+            </HashRouter>
+     )
 }
-
 export default App;
